@@ -19,9 +19,6 @@ public class OrdenCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
-
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
@@ -32,23 +29,22 @@ public class OrdenCompra {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @JsonBackReference(value = "usuario-orden")
     private Usuario usuario;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "estado_compra_id")
+    @JsonBackReference(value = "estado_compra")
     private EstadoCompra estadoCompra;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "orden-producto")
     private List<ProductoCompra> productoCompra;
 
-    public OrdenCompra(Long id, String nombre, Usuario usuario, EstadoCompra estadoCompra, List<ProductoCompra> productoCompra) {
+    public OrdenCompra(Long id, Usuario usuario, EstadoCompra estadoCompra, List<ProductoCompra> productoCompra) {
         this.id = id;
-        this.nombre = nombre;
         this.usuario = usuario;
         this.estadoCompra = estadoCompra;
         this.productoCompra = productoCompra;
@@ -59,6 +55,7 @@ public class OrdenCompra {
     }
 
     public OrdenCompra() {
+        this.estadoCompra = new EstadoCompra("En proceso");
     }
 
     public Long getId() {
@@ -67,14 +64,6 @@ public class OrdenCompra {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public Usuario getUsuario() {

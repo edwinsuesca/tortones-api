@@ -31,8 +31,8 @@ public class Categoria {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference(value="categoria-ingrediente")
     private List<Ingrediente> ingrediente;
 
     public Categoria(Long id, String nombre, List<Ingrediente> ingrediente) {

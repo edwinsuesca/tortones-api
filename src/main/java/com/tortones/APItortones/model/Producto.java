@@ -40,8 +40,8 @@ public class Producto {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference(value = "productoCompra-producto")
     private List<ProductoCompra> productoCompra;
 
     public Producto(Long id, String urlImagen, String nombre, String descripcion, Float precio, List<ProductoCompra> productoCompra) {

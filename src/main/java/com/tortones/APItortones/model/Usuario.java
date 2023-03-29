@@ -49,19 +49,11 @@ public class Usuario {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference(value = "usuario-orden")
     private List<OrdenCompra> ordenCompra;
 
-    public Usuario(Long id,
-                   String rol,
-                   String nombre,
-                   String apellido,
-                   String direccion,
-                   String correo,
-                   String telefono,
-                   String clave,
-                   List<OrdenCompra> ordenCompra) {
+    public Usuario(Long id, String rol, String nombre, String apellido, String direccion, String correo, String telefono, String clave, Date fechaCreacion, Date fechaActualizacion, List<OrdenCompra> ordenCompra) {
         this.id = id;
         this.rol = rol;
         this.nombre = nombre;
@@ -70,6 +62,8 @@ public class Usuario {
         this.correo = correo;
         this.telefono = telefono;
         this.clave = clave;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaActualizacion = fechaActualizacion;
         this.ordenCompra = ordenCompra;
     }
 

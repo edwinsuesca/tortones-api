@@ -36,9 +36,9 @@ public class Ingrediente {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "categoria_id")
+    @JsonBackReference(value="categoria-ingrediente")
     private Categoria categoria;
 
     public Ingrediente(Long id, String nombre, String descripcion, String color, Categoria categoria) {

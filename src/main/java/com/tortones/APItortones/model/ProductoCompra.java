@@ -2,6 +2,7 @@ package com.tortones.APItortones.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import jakarta.persistence.*;
@@ -30,14 +31,14 @@ public class ProductoCompra {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "orden_compra_id")
+    @JsonBackReference(value = "orden-producto")
     private OrdenCompra ordenCompra;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "producto_id")
+    @JsonBackReference(value = "productoCompra-producto")
     private Producto producto;
 
     public ProductoCompra(Long id, Integer cantidad, OrdenCompra ordenCompra, Producto producto) {
