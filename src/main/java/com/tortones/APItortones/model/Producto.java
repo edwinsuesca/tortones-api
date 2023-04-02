@@ -27,7 +27,7 @@ public class Producto {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @Column(name = "precio", nullable = false)
+    @Column(name = "precio_unidad", nullable = false)
     private Float precio;
 
     @Column(nullable = false, updatable = false)

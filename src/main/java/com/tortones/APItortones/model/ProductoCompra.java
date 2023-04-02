@@ -2,7 +2,6 @@ package com.tortones.APItortones.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import jakarta.persistence.*;
@@ -32,20 +31,28 @@ public class ProductoCompra {
     private Date fechaActualizacion;
 
     @ManyToOne
-    @JoinColumn(name = "orden_compra_id")
+    @JoinColumn(name = "compra_id")
     @JsonBackReference(value = "orden-producto")
-    private OrdenCompra ordenCompra;
+    private Compra compra;
 
     @ManyToOne
     @JoinColumn(name = "producto_id")
     @JsonBackReference(value = "productoCompra-producto")
     private Producto producto;
 
-    public ProductoCompra(Long id, Integer cantidad, OrdenCompra ordenCompra, Producto producto) {
+    @ManyToOne
+    @JoinColumn(name = "porcion_id")
+    @JsonBackReference(value = "porciones-producto-compra")
+    private Porcion porcion;
+
+    public ProductoCompra(Long id, Integer cantidad, Date fechaCreacion, Date fechaActualizacion, Compra compra, Producto producto, Porcion porcion) {
         this.id = id;
         this.cantidad = cantidad;
-        this.ordenCompra = ordenCompra;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaActualizacion = fechaActualizacion;
+        this.compra = compra;
         this.producto = producto;
+        this.porcion = porcion;
     }
 
     public ProductoCompra() {
@@ -67,12 +74,12 @@ public class ProductoCompra {
         this.cantidad = cantidad;
     }
 
-    public OrdenCompra getOrdenCompra() {
-        return ordenCompra;
+    public Compra getCompra() {
+        return compra;
     }
 
-    public void setOrdenCompra(OrdenCompra ordenCompra) {
-        this.ordenCompra = ordenCompra;
+    public void setCompra(Compra compra) {
+        this.compra = compra;
     }
 
     public Producto getProducto() {
@@ -97,5 +104,13 @@ public class ProductoCompra {
 
     public void setFechaActualizacion(Date fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public Porcion getPorcion() {
+        return porcion;
+    }
+
+    public void setPorcion(Porcion porcion) {
+        this.porcion = porcion;
     }
 }

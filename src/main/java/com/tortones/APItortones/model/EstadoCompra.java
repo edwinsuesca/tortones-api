@@ -33,12 +33,12 @@ public class EstadoCompra {
 
     @OneToMany(mappedBy = "estadoCompra", cascade = CascadeType.ALL, orphanRemoval = false)
     @JsonManagedReference(value = "estado_compra")
-    private List<OrdenCompra> ordenCompra;
+    private List<Compra> compra;
 
-    public EstadoCompra(Long id, String nombre, List<OrdenCompra> ordenCompra) {
+    public EstadoCompra(Long id, String nombre, List<Compra> compra) {
         this.id = id;
         this.nombre = nombre;
-        this.ordenCompra = ordenCompra;
+        this.compra = compra;
     }
 
     public EstadoCompra(Long id) {
@@ -68,12 +68,12 @@ public class EstadoCompra {
         this.nombre = nombre;
     }
 
-    public List<OrdenCompra> getOrdenCompra() {
-        return ordenCompra;
+    public List<Compra> getOrdenCompra() {
+        return compra;
     }
 
-    public void setOrdenCompra(List<OrdenCompra> ordenCompra) {
-        this.ordenCompra = ordenCompra;
+    public void setOrdenCompra(List<Compra> compra) {
+        this.compra = compra;
     }
 
     public Date getFechaCreacion() {

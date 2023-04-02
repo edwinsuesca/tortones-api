@@ -1,6 +1,5 @@
 package com.tortones.APItortones.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -8,16 +7,26 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "ordenesCompra")
+@Table(name = "porciones")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"fecha_creacion", "fecha_actualizacion"}, allowGetters = true)
-public class OrdenCompra {
+public class Porcion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "peso", nullable = false)
+    private String peso;
+
+    @Column(name = "porcion", nullable = false)
+    private String porcion;
+
+    @Column(name = "factor_precio", nullable = false)
+    private Float factorPrecio;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -29,33 +38,25 @@ public class OrdenCompra {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    @JsonBackReference(value = "usuario-orden")
-    private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "estado_compra_id")
-    @JsonBackReference(value = "estado_compra")
-    private EstadoCompra estadoCompra;
-
-    @OneToMany(mappedBy = "ordenCompra", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "orden-producto")
+    @OneToMany(mappedBy = "porcion", cascade = CascadeType.ALL, orphanRemoval = false)
+    @JsonManagedReference(value = "porciones-producto-compra")
     private List<ProductoCompra> productoCompra;
 
-    public OrdenCompra(Long id, Usuario usuario, EstadoCompra estadoCompra, List<ProductoCompra> productoCompra) {
+    public Porcion(Long id, String peso, String porcion, Float factorPrecio, List<ProductoCompra> productoCompra, Date fechaCreacion, Date fechaActualizacion) {
         this.id = id;
-        this.usuario = usuario;
-        this.estadoCompra = estadoCompra;
+        this.peso = peso;
+        this.porcion = porcion;
+        this.factorPrecio = factorPrecio;
         this.productoCompra = productoCompra;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaActualizacion = fechaActualizacion;
     }
 
-    public OrdenCompra(Long id) {
+    public Porcion(Long id) {
         this.id = id;
     }
 
-    public OrdenCompra() {
-        this.estadoCompra = new EstadoCompra("En proceso");
+    public Porcion() {
     }
 
     public Long getId() {
@@ -66,20 +67,28 @@ public class OrdenCompra {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public String getPeso() {
+        return peso;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setPeso(String peso) {
+        this.peso = peso;
     }
 
-    public EstadoCompra getEstadoCompra() {
-        return estadoCompra;
+    public String getPorcion() {
+        return porcion;
     }
 
-    public void setEstadoCompra(EstadoCompra estadoCompra) {
-        this.estadoCompra = estadoCompra;
+    public void setPorcion(String porcion) {
+        this.porcion = porcion;
+    }
+
+    public Float getFactorPrecio() {
+        return factorPrecio;
+    }
+
+    public void setFactorPrecio(Float factorPrecio) {
+        this.factorPrecio = factorPrecio;
     }
 
     public List<ProductoCompra> getProductoCompra() {

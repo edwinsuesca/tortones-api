@@ -1,6 +1,9 @@
 package com.tortones.APItortones.controller;
 
+import com.tortones.APItortones.model.Porcion;
 import com.tortones.APItortones.model.ProductoCompra;
+import com.tortones.APItortones.model.Usuario;
+import com.tortones.APItortones.repository.PorcionRepository;
 import com.tortones.APItortones.repository.ProductoCompraRepository;
 import com.tortones.APItortones.repository.ProductoCompraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,8 @@ public class ProductoCompraController {
 
     @Autowired
     private ProductoCompraRepository productoCompraRepository;
+    @Autowired
+    private PorcionRepository porcionRepository;
 
     @GetMapping("/productos-compra")
     public List<ProductoCompra> getAllOrdenesCompra() {
@@ -37,6 +42,14 @@ public class ProductoCompraController {
         if ((productoCompraExistente != null)) {
             if (productoCompra.getCantidad() != null) {
                 productoCompraExistente.setCantidad(productoCompra.getCantidad());
+            }
+
+            if (productoCompra.getPorcion().getId() != null) {
+                Long idPorcion = productoCompra.getPorcion().getId();
+                Porcion porcionExistente = porcionRepository.findById(idPorcion).orElse(null);
+                if(porcionExistente != null){
+                    productoCompraExistente.setPorcion(porcionExistente);
+                }
             }
 
             return productoCompraRepository.save(productoCompraExistente);

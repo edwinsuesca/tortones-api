@@ -30,7 +30,7 @@ public class Usuario {
     @Column(name = "direccion", nullable = false)
     private String direccion;
 
-    @Column(name = "correo", nullable = false)
+    @Column(name = "correo", nullable = false, unique = true)
     private String correo;
 
     @Column(name = "telefono", nullable = false)
@@ -51,9 +51,9 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = false)
     @JsonManagedReference(value = "usuario-orden")
-    private List<OrdenCompra> ordenCompra;
+    private List<Compra> compra;
 
-    public Usuario(Long id, String rol, String nombre, String apellido, String direccion, String correo, String telefono, String clave, Date fechaCreacion, Date fechaActualizacion, List<OrdenCompra> ordenCompra) {
+    public Usuario(Long id, String rol, String nombre, String apellido, String direccion, String correo, String telefono, String clave, Date fechaCreacion, Date fechaActualizacion, List<Compra> compra) {
         this.id = id;
         this.rol = rol;
         this.nombre = nombre;
@@ -64,7 +64,14 @@ public class Usuario {
         this.clave = clave;
         this.fechaCreacion = fechaCreacion;
         this.fechaActualizacion = fechaActualizacion;
-        this.ordenCompra = ordenCompra;
+        this.compra = compra;
+    }
+
+    public Usuario(Long id, String rol, String nombre, String apellido) {
+        this.id = id;
+        this.rol = rol;
+        this.nombre = nombre;
+        this.apellido = apellido;
     }
 
     public Usuario(Long id) {
@@ -154,11 +161,11 @@ public class Usuario {
         this.fechaActualizacion = fechaActualizacion;
     }
 
-    public List<OrdenCompra> getOrdenCompra() {
-        return ordenCompra;
+    public List<Compra> getOrdenCompra() {
+        return compra;
     }
 
-    public void setOrdenCompra(List<OrdenCompra> ordenCompra) {
-        this.ordenCompra = ordenCompra;
+    public void setOrdenCompra(List<Compra> compra) {
+        this.compra = compra;
     }
 }

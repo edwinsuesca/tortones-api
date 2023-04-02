@@ -1,9 +1,12 @@
 package com.tortones.APItortones.controller;
 
+import com.tortones.APItortones.model.SesionUsuario;
 import com.tortones.APItortones.model.Usuario;
 import com.tortones.APItortones.repository.UsuarioRepository;
-import jdk.jfr.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +18,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/usuarios")
     public List<Usuario> getAllUsuarios() {
@@ -23,6 +28,8 @@ public class UsuarioController {
 
     @PostMapping(value = "/usuarios", consumes = "application/json")
     public Usuario createUsuario(@RequestBody Usuario usuario) {
+        String claveEncriptada = bCryptPasswordEncoder.encode(usuario.getClave());
+        usuario.setClave(claveEncriptada);
         return usuarioRepository.save(usuario);
     }
 
@@ -54,7 +61,8 @@ public class UsuarioController {
                 usuarioExistente.setTelefono(usuario.getTelefono());
             }
             if (usuario.getClave() != null) {
-                usuarioExistente.setClave(usuario.getClave());
+                String claveEncriptada = bCryptPasswordEncoder.encode(usuario.getClave());
+                usuarioExistente.setClave(claveEncriptada);
             }
             return usuarioRepository.save(usuarioExistente);
         }
@@ -70,5 +78,24 @@ public class UsuarioController {
             usuarioRepository.deleteById(id);
             return "Usuario " + "con ID " + id + " eliminado exitosamente.";
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<SesionUsuario> login(@RequestBody Usuario usuario) {
+        Usuario usuarioExistente = usuarioRepository.findByCorreo(usuario.getCorreo());
+        if (usuarioExistente != null) {
+            if (bCryptPasswordEncoder.matches(usuario.getClave(), usuarioExistente.getClave())) {
+                //String token = generarTokenDeAutenticacion(usuario);
+                Long id = usuarioExistente.getId();
+                String rol = usuarioExistente.getRol();
+                String nombre = usuarioExistente.getNombre();
+                String apellido = usuarioExistente.getApellido();
+                SesionUsuario sesion = new SesionUsuario(id, rol, nombre, apellido);
+
+                return new ResponseEntity<>(sesion, HttpStatus.OK);
+            }
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 }
