@@ -21,7 +21,7 @@ public class Producto {
     @Column(name = "url_imagen", nullable = false)
     private String urlImagen;
 
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
     @Column(name = "descripcion", nullable = false)

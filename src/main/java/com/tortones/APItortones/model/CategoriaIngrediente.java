@@ -13,7 +13,7 @@ import java.util.*;
 @Table(name = "categoriasIngrediente")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"fecha_creacion", "fecha_actualizacion"}, allowGetters = true)
-public class Categoria {
+public class CategoriaIngrediente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,21 +31,21 @@ public class Categoria {
     @LastModifiedDate
     private Date fechaActualizacion;
 
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "categoriaIngrediente", cascade = CascadeType.ALL, orphanRemoval = false)
     @JsonManagedReference(value="categoria-ingrediente")
     private List<Ingrediente> ingrediente;
 
-    public Categoria(Long id, String nombre, List<Ingrediente> ingrediente) {
+    public CategoriaIngrediente(Long id, String nombre, List<Ingrediente> ingrediente) {
         this.id = id;
         this.nombre = nombre;
         this.ingrediente = ingrediente;
     }
 
-    public Categoria(Long id) {
+    public CategoriaIngrediente(Long id) {
         this.id = id;
     }
 
-    public Categoria() {
+    public CategoriaIngrediente() {
     }
 
     public Long getId() {

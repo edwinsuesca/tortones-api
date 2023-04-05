@@ -5,7 +5,9 @@ import com.tortones.APItortones.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -53,13 +55,13 @@ public class ProductoController {
     }
 
     @DeleteMapping("/productos/{id}")
-    public String deleteProducto(@PathVariable Long id) {
+    public Map<String, String> deleteProducto(@PathVariable Long id) {
         Producto productoExistente = productoRepository.findById(id).orElse(null);
         if(productoExistente == null){
-            return "Producto no existe";
+            return Map.of("message", "Producto no existe");
         } else{
             productoRepository.deleteById(id);
-            return "Producto " + "con ID " + id + " eliminado exitosamente.";
+            return Map.of("message", "Producto " + "con ID " + id + " eliminado exitosamente.");
         }
     }
 }

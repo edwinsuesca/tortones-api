@@ -19,10 +19,10 @@ public class Porcion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "peso", nullable = false)
+    @Column(name = "peso", nullable = false, unique = true)
     private String peso;
 
-    @Column(name = "porcion", nullable = false)
+    @Column(name = "porcion", nullable = false, unique = true)
     private String porcion;
 
     @Column(name = "factor_precio", nullable = false)

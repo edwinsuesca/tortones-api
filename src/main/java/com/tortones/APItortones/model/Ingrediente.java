@@ -39,14 +39,14 @@ public class Ingrediente {
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     @JsonBackReference(value="categoria-ingrediente")
-    private Categoria categoria;
+    private CategoriaIngrediente categoriaIngrediente;
 
-    public Ingrediente(Long id, String nombre, String descripcion, String color, Categoria categoria) {
+    public Ingrediente(Long id, String nombre, String descripcion, String color, CategoriaIngrediente categoriaIngrediente) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.color = color;
-        this.categoria = categoria;
+        this.categoriaIngrediente = categoriaIngrediente;
     }
 
     public Ingrediente() {
@@ -100,11 +100,11 @@ public class Ingrediente {
         this.fechaActualizacion = fechaActualizacion;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public CategoriaIngrediente getCategoriaIngrediente() {
+        return categoriaIngrediente;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoriaIngrediente(CategoriaIngrediente categoriaIngrediente) {
+        this.categoriaIngrediente = categoriaIngrediente;
     }
 }
