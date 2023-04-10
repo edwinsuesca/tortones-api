@@ -1,17 +1,6 @@
 package com.tortones.APItortones.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-
-public class SesionUsuario implements UserDetails {
-
-    private Usuario usuario;
-
-    public SesionUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+public class SesionUsuario {
     private Long id;
     private String nombre;
     private String apellido;
@@ -74,40 +63,5 @@ public class SesionUsuario implements UserDetails {
 
     public void setCorreo(String correo) {
         this.correo = correo;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return usuario.getCorreo();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
     }
 }
