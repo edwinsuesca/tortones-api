@@ -19,6 +19,9 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "total", nullable = false)
+    private Float total;
+
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
@@ -43,11 +46,12 @@ public class Compra {
     @JsonManagedReference(value = "orden-producto")
     private List<ProductoCompra> productosCompra;
 
-    public Compra(Long id, Usuario usuario, EstadoCompra estadoCompra, List<ProductoCompra> productoCompra) {
+    public Compra(Long id, Usuario usuario, Float total, EstadoCompra estadoCompra, List<ProductoCompra> productoCompra) {
         this.id = id;
         this.usuario = usuario;
         this.estadoCompra = estadoCompra;
         this.productosCompra = productoCompra;
+        this.total = total;
     }
 
     public Compra(Long id) {
@@ -109,5 +113,13 @@ public class Compra {
 
     public void setFechaActualizacion(Date fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public Float getTotal() {
+        return total;
+    }
+
+    public void setTotal(Float total) {
+        this.total = total;
     }
 }

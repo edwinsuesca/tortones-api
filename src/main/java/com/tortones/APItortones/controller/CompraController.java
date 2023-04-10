@@ -1,11 +1,7 @@
 package com.tortones.APItortones.controller;
 
-import com.tortones.APItortones.model.EstadoCompra;
-import com.tortones.APItortones.model.Compra;
-import com.tortones.APItortones.model.ProductoCompra;
-import com.tortones.APItortones.repository.EstadoCompraRepository;
-import com.tortones.APItortones.repository.CompraRepository;
-import com.tortones.APItortones.repository.ProductoCompraRepository;
+import com.tortones.APItortones.model.*;
+import com.tortones.APItortones.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +24,12 @@ public class CompraController {
     @Autowired
     private ProductoCompraRepository productoCompraRepository;
 
+    @Autowired
+    private PorcionRepository porcionRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
     @GetMapping("/compras")
     public List<Compra> getAllOrdenesCompra() {
         return compraRepository.findAll();
@@ -41,14 +43,28 @@ public class CompraController {
 
         try {
             // Guardar la compra en la base de datos
+            compra.setTotal(0.0F);
             Compra compraGuardada = compraRepository.save(compra);
 
-            // Asociar cada producto a la compra y guardarlo en la base de datos
+            // Asociar cada producto a la compra y calcular el subtotal
             if(compra.getProductosCompra() != null) {
+                float total = 0.0F;
                 for (ProductoCompra producto : compra.getProductosCompra()) {
-                    producto.setCompra(compraGuardada);
-                    productoCompraRepository.save(producto);
+                    Producto productoExistente = productoRepository.findById(producto.getProducto().getId()).orElse(null);
+                    Porcion porcionExistente = porcionRepository.findById(producto.getPorcion().getId()).orElse(null);
+                    if(productoExistente != null && porcionExistente != null){
+                        Float factor = porcionExistente.getFactorPrecio();
+                        Float precio = productoExistente.getPrecio();
+                        Integer cantidad = producto.getCantidad();
+                        float subtotal = factor * precio * cantidad;
+                        total += subtotal;
+                        producto.setSubtotal(subtotal);
+                        producto.setCompra(compraGuardada);
+                        productoCompraRepository.save(producto);
+                    }
                 }
+                compraGuardada.setTotal(total);
+                compraRepository.save(compraGuardada);
             }
 
             return new ResponseEntity(compraGuardada, HttpStatus.CREATED);
@@ -56,6 +72,7 @@ public class CompraController {
             return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("/compras/{id}")
     public Compra getOrdenCompraById(@PathVariable Long id) {

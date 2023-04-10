@@ -4,13 +4,17 @@ public class SesionUsuario {
     private Long id;
     private String nombre;
     private String apellido;
+    private String telefono;
+    private String correo;
     private String rol;
 
-    public SesionUsuario(Long id, String rol, String nombre, String apellido) {
+    public SesionUsuario(Long id, String rol, String nombre, String apellido, String telefono, String correo) {
         this.id = id;
         this.rol = rol;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.telefono = telefono;
+        this.correo = correo;
     }
 
     public Long getId() {
@@ -43,5 +47,21 @@ public class SesionUsuario {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 }

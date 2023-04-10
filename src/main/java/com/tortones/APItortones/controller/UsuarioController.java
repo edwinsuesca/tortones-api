@@ -90,7 +90,9 @@ public class UsuarioController {
                 String rol = usuarioExistente.getRol();
                 String nombre = usuarioExistente.getNombre();
                 String apellido = usuarioExistente.getApellido();
-                SesionUsuario sesion = new SesionUsuario(id, rol, nombre, apellido);
+                String telefono = usuarioExistente.getTelefono();
+                String correo = usuarioExistente.getCorreo();
+                SesionUsuario sesion = new SesionUsuario(id, rol, nombre, apellido, telefono, correo);
 
                 return new ResponseEntity<>(sesion, HttpStatus.OK);
             }

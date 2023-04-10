@@ -20,6 +20,9 @@ public class ProductoCompra {
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
 
+    @Column(name = "subtotal", columnDefinition = "float default 0")
+    private Float subtotal;
+
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
@@ -45,7 +48,7 @@ public class ProductoCompra {
     @JsonBackReference(value = "porciones-producto-compra")
     private Porcion porcion;
 
-    public ProductoCompra(Long id, Integer cantidad, Date fechaCreacion, Date fechaActualizacion, Compra compra, Producto producto, Porcion porcion) {
+    public ProductoCompra(Long id, Integer cantidad, Float subtotal, Date fechaCreacion, Date fechaActualizacion, Compra compra, Producto producto, Porcion porcion) {
         this.id = id;
         this.cantidad = cantidad;
         this.fechaCreacion = fechaCreacion;
@@ -53,6 +56,7 @@ public class ProductoCompra {
         this.compra = compra;
         this.producto = producto;
         this.porcion = porcion;
+        this.subtotal = subtotal;
     }
 
     public ProductoCompra() {
@@ -112,5 +116,13 @@ public class ProductoCompra {
 
     public void setPorcion(Porcion porcion) {
         this.porcion = porcion;
+    }
+
+    public Float getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Float subtotal) {
+        this.subtotal = subtotal;
     }
 }
