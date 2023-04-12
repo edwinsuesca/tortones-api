@@ -1,6 +1,7 @@
 package com.tortones.APItortones;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -49,13 +50,19 @@ public class ApiTortonesApplication implements WebMvcConfigurer{
 		converters.add(converter);
 	}
 
+	@Value("${email.dir}")
+	private String direccionEmail;
+
+	@Value("${email.pass}")
+	private String claveEmail;
+
 	@Bean
 	public JavaMailSender javaMailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.master.net"); // Configura el servidor de correo saliente
+		mailSender.setHost("smtp.vivaldi.net"); // Configura el servidor de correo saliente
 		mailSender.setPort(587); // Configura el puerto SMTP
-		mailSender.setUsername("emailmaster@master.net"); // Tu dirección de correo electrónico
-		mailSender.setPassword("password"); // Tu contraseña
+		mailSender.setUsername(direccionEmail); // Tu dirección de correo electrónico
+		mailSender.setPassword(claveEmail); // Tu contraseña
 
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");

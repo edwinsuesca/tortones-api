@@ -1,5 +1,6 @@
 package com.tortones.APItortones.controller;
 
+import com.tortones.APItortones.model.ClaveUsuario;
 import com.tortones.APItortones.model.SesionUsuario;
 import com.tortones.APItortones.model.Usuario;
 import com.tortones.APItortones.repository.UsuarioRepository;
@@ -39,7 +40,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/usuarios/{id}")
-    public Usuario updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public ResponseEntity<SesionUsuario> updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
         Usuario usuarioExistente = usuarioRepository.findById(id).orElse(null);
         if (usuarioExistente != null) {
             if (usuario.getRol() != null) {
@@ -64,7 +65,15 @@ public class UsuarioController {
                 String claveEncriptada = bCryptPasswordEncoder.encode(usuario.getClave());
                 usuarioExistente.setClave(claveEncriptada);
             }
-            return usuarioRepository.save(usuarioExistente);
+            usuarioRepository.save(usuarioExistente);
+            SesionUsuario sesion = new SesionUsuario(
+                    usuarioExistente.getId(),
+                    usuarioExistente.getRol(),
+                    usuarioExistente.getNombre(),
+                    usuarioExistente.getApellido(),
+                    usuarioExistente.getTelefono(),
+                    usuarioExistente.getCorreo());
+            return new ResponseEntity<>(sesion, HttpStatus.OK);
         }
         return null;
     }
@@ -94,6 +103,28 @@ public class UsuarioController {
                 String correo = usuarioExistente.getCorreo();
                 SesionUsuario sesion = new SesionUsuario(id, rol, nombre, apellido, telefono, correo);
 
+                return new ResponseEntity<>(sesion, HttpStatus.OK);
+            }
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+    }
+
+    @PutMapping("usuarios/cambiar-clave")
+    public ResponseEntity<SesionUsuario> cambiarClave(@RequestBody ClaveUsuario claveUsuario) {
+        Usuario usuarioExistente = usuarioRepository.findByCorreo(claveUsuario.getCorreo());
+        if (usuarioExistente != null) {
+            if (bCryptPasswordEncoder.matches(claveUsuario.getClaveActual(), usuarioExistente.getClave())) {
+                String nuevaClaveEncriptada = bCryptPasswordEncoder.encode(claveUsuario.getClaveNueva());
+                usuarioExistente.setClave(nuevaClaveEncriptada);
+                usuarioRepository.save(usuarioExistente);
+                SesionUsuario sesion = new SesionUsuario(
+                        usuarioExistente.getId(),
+                        usuarioExistente.getRol(),
+                        usuarioExistente.getNombre(),
+                        usuarioExistente.getApellido(),
+                        usuarioExistente.getTelefono(),
+                        usuarioExistente.getCorreo());
                 return new ResponseEntity<>(sesion, HttpStatus.OK);
             }
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
