@@ -52,10 +52,10 @@ public class ApiTortonesApplication implements WebMvcConfigurer{
 	@Bean
 	public JavaMailSender javaMailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.vivaldi.net"); // Configura el servidor de correo saliente
+		mailSender.setHost("smtp.master.net"); // Configura el servidor de correo saliente
 		mailSender.setPort(587); // Configura el puerto SMTP
-		mailSender.setUsername("tortones@vivaldi.net"); // Tu dirección de correo electrónico
-		mailSender.setPassword("Tortones*123"); // Tu contraseña
+		mailSender.setUsername("emailmaster@master.net"); // Tu dirección de correo electrónico
+		mailSender.setPassword("password"); // Tu contraseña
 
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");
