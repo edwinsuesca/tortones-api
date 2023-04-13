@@ -6,6 +6,7 @@ import com.tortones.APItortones.repository.UsuarioRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,16 @@ public class EmailController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Value("${email.dir}")
+    private String direccionEmail;
+
     @PostMapping("/cotizacion")
     public Map<String, String> enviarCotizacion(@RequestBody Cotizacion cotizacion) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         try {
-            helper.setFrom("tortones@vivaldi.net");
+            helper.setFrom(direccionEmail);
             helper.setTo(cotizacion.getRemitente());
             helper.setSubject(cotizacion.getAsunto());
             helper.setText(cotizacion.getMensaje(), true);
@@ -53,7 +57,7 @@ public class EmailController {
             for (Usuario usuario : usuarios) {
                 destinatarios.add(new InternetAddress(usuario.getCorreo()));
             }
-            helper.setFrom("tortones@vivaldi.net");
+            helper.setFrom(direccionEmail);
             helper.setTo(destinatarios.toArray(new InternetAddress[destinatarios.size()]));
             helper.setSubject(cotizacion.getAsunto());
             helper.setText(cotizacion.getMensaje(), true);
